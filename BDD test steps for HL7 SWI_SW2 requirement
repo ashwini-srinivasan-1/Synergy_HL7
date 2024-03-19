@@ -1,0 +1,36 @@
+[SW1]: WHILE the system is connected to Device Observation Consumer 
+WHEN the reporting interval is reached 
+THEN the system shall send an ORU^R01 message to the Device Observation Consumer
+[SW2]: The system shall send out ORU^R01 messages with the following patient demographics in the PID segment: Patient Identifier List, Patient Name, Date/Time of Birth, Administrative Sex, Patient Alias.
+Scenario Outline 1: Send out HL7 message to DOC.
+GIVEN The system is connected to DOC via Network Socket.
+AND the following admitted patient details are in the System:
+ 	| Field	                        | Value                | 
+	| First Name                  	| Tom                  |
+	| Middle Name                 	|                      |
+	| Last Name                    	| khan                 |
+	| Alias                     	  | Tjk                  |
+	| Patient Type	                | Adult                |
+	| Primary ID                   	| 123456 MR            |
+	| Secondary ID	                |                      |
+	| Date of birth               	| 1996-03-18           |
+	| Sex at birth                	| Male                 |
+	| Paced mode                   	| On                   |
+	| Height                      	|                      |
+	| Weight	                      |                      |
+	| Admission time                | 2014-03-11T11:11:34Z |
+	| Prior ICU stay	              | Unspecified          |
+	| notes	                        | Patient1- test       |
+
+WHEN Reporting Interval is reached.  
+THEN the system sends out ORU^R01 message to DOC: 
+Segment ID		| Element name                     	| Value               |
+PID-0		      | Segment Header                  	| PID                 |
+PID-1		      | Set ID -PID                 	    | Empty               |
+PID-2	       	| Patient ID                  	    | Empty               |
+PID-3		      | Patient Identifier List           | 123456^^^^MR~^^^^VN |
+PID-4	      	| Alternate Patient ID - PID	      | Empty               |
+PID-5		      | Patient Name                     	| khan^Tom^^^^^^^L    |
+PID-6		      | Mother’s Maiden Name	            | Empty               |
+PID-7	       	| Date/Time of birth	              | 19960318            |
+PID-8		      | Administrative Sex               	| M                   |
